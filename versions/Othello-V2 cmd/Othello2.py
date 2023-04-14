@@ -348,5 +348,34 @@ def othello():
             elif b[0]==True:
                 print(gagnant(b[1]["plateau"]))
         i+=1
+#===================================Partie 4=======================================================
+#Mode joueur contre ordinateur
+def jouer_ordi(plateau, joueur):
+    # Détermine les coups possibles pour l'ordinateur
+    coups_possibles = coups_possibles_plateau(plateau, joueur)
+    if not coups_possibles:
+        return False
+
+    # Détermine la valeur maximale pour chaque coup possible
+    valeurs = []
+    for coup in coups_possibles:
+        copie_plateau = copie_plateau_othello(plateau)
+        jouer_coup(copie_plateau, joueur, coup[0], coup[1])
+        valeur = minimax(copie_plateau, pion_adverse(joueur), profondeur_max, True)
+        valeurs.append(valeur)
+
+    # Trouve l'indice du coup ayant la valeur maximale
+    max_valeur = max(valeurs)
+    indices = [i for i, v in enumerate(valeurs) if v == max_valeur]
+
+    # Choisit un coup aléatoire parmi les coups ayant la valeur maximale
+    index_choisi = random.choice(indices)
+    coup_choisi = coups_possibles[index_choisi]
+
+    # Joue le coup sur le plateau original
+    jouer_coup(plateau, joueur, coup_choisi[0], coup_choisi[1])
+
+    return True
+
 
 othello()
